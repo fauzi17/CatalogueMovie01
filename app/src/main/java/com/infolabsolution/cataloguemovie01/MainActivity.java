@@ -1,12 +1,12 @@
 package com.infolabsolution.cataloguemovie01;
 
 import android.app.ProgressDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -21,22 +21,35 @@ import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements MaterialSearchBar.OnSearchActionListener {
     private static final String API_KEY = "d6d19834a416851ac3aac202b804dfd6";
-    private static final String BASE_URL = "http://api.themoviedb.org/3/";
+    private static final String BASE_URL = "http://api.themoviedb.org/3";
+
+    private String query = "code";
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
+
+    private TextView tvTotalMovies;
+
+    private SwipeRefreshLayout swipe_refresh;
 
     private MaterialSearchBar searchBar;
     private List<String> suggestList = new ArrayList<>();
 
     private List<ListMovies> listMovies;
 
+    private String movie_title = "";
+    private int currentPage = 1;
+    private int totalPages = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        tvTotalMovies = findViewById(R.id.tv_total_movies);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
@@ -50,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
-                if(!enabled){
+                if (!enabled) {
                     recyclerView.setAdapter(adapter);
                 }
             }
@@ -58,16 +71,21 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSearchConfirmed(CharSequence text) {
 
-                startSearch(text.toString(), true, null, true);
+                startSearch(query = text.toString(), true, null, false);
+                loadRecyclerViewData();
 
             }
 
             @Override
             public void onButtonClicked(int buttonCode) {
+
+
             }
         });
 
-        loadRecyclerViewData();
+        if (listMovies.isEmpty()) {
+            loadRecyclerViewData();
+        }
 
     }
 
@@ -78,8 +96,15 @@ public class MainActivity extends AppCompatActivity {
         progressDialog.show();
 
         AsyncHttpClient client = new AsyncHttpClient();
-        String queryMovie = "captain";
-        String url = BASE_URL + "search/movie?api_key=" + API_KEY + "&language=en-US&query=" + queryMovie;
+        String url;
+
+        if (listMovies.isEmpty()) {
+            url = BASE_URL + "/discover/movie?api_key=" + API_KEY;
+
+        } else {
+            listMovies.clear();
+            url = BASE_URL + "/search/movie?api_key=" + API_KEY + "&language=en-US&query=" + query;
+        }
 
         client.get(url, new JsonHttpResponseHandler() {
             @Override
@@ -88,8 +113,13 @@ public class MainActivity extends AppCompatActivity {
 
                 progressDialog.dismiss();
 
-                Toast.makeText(MainActivity.this, "onSuccess Call", Toast.LENGTH_SHORT).show();
                 try {
+                    ListMovies item_result = new ListMovies(
+                            response.getString("total_results"),
+                            response.getString("total_pages")
+                    );
+
+
                     JSONArray array = response.getJSONArray("results");
 
                     for (int i = 0; i < array.length(); i++) {
@@ -105,8 +135,17 @@ public class MainActivity extends AppCompatActivity {
                         listMovies.add(item);
                     }
 
-                    adapter = new RecyclerViewAdapter(listMovies, getApplicationContext());
-                    recyclerView.setAdapter(adapter);
+                    if (listMovies.isEmpty()) {
+                        setEmptySearch();
+
+                    } else {
+
+                        setTotalMovies(item_result);
+
+                        adapter = new RecyclerViewAdapter(listMovies, getApplicationContext());
+                        recyclerView.setAdapter(adapter);
+                    }
+
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -117,4 +156,92 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    private void setTotalMovies(ListMovies list) {
+        String totalMovies = list.getTotal_results();
+        tvTotalMovies.setText(totalMovies + " movies found. ");
+    }
+
+    private void setEmptySearch() {
+        tvTotalMovies.setText("No movies found.");
+        recyclerView.clearOnChildAttachStateChangeListeners();
+
+    }
+//
+//    private void loadData(final String movie_title) {
+//        getSupportActionBar().setSubtitle("");
+//
+//        if (movie_title.isEmpty()) apiCall = apiClient.getService().getPopularMovie(currentPage);
+//        else apiCall = apiClient.getService().getSearchMovie(currentPage, movie_title);
+//
+//        apiCall.enqueue(new Callback<SearchModel>() {
+//            @Override
+//            public void onResponse(Call<SearchModel> call, Response<SearchModel> response) {
+//                if (response.isSuccessful()) {
+//                    totalPages = response.body().getTotalPages();
+//                    List<ResultsItem> items = response.body().getResults();
+//                    showResults(response.body().getTotalResults());
+//
+//                    if (currentPage > 1) adapter.updateData(items);
+//                    else adapter.replaceAll(items);
+//
+//                    stopRefrehing();
+//                } else loadFailed();
+//            }
+//
+//            @Override
+//            public void onFailure(Call<SearchModel> call, Throwable t) {
+//                loadFailed();
+//            }
+//        });
+//    }
+
+//    private void loadFailed() {
+//        stopRefrehing();
+//        Toast.makeText(MainActivity.this, "Failed to load data.\nPlease check your Internet connections!", Toast.LENGTH_SHORT).show();
+//    }
+//
+//
+//    private void startRefreshing() {
+//        if (swipe_refresh.isRefreshing()) return;
+//        swipe_refresh.setRefreshing(true);
+//
+////        loadData(movie_title);
+//    }
+//
+//
+//    private void stopRefrehing() {
+//        if (swipe_refresh.isRefreshing()) {
+//            swipe_refresh.setRefreshing(false);
+//        }
+//    }
+//
+//
+//    @Override
+//    public void onRefresh() {
+//        currentPage = 1;
+//        totalPages = 1;
+//
+//        stopRefrehing();
+//        startRefreshing();
+//
+//    }
+
+    @Override
+    public void onSearchStateChanged(boolean enabled) {
+
+    }
+
+    @Override
+    public void onSearchConfirmed(CharSequence text) {
+//        movie_title = String.valueOf(text);
+//        onRefresh();
+    }
+
+    @Override
+    public void onButtonClicked(int buttonCode) {
+
+    }
+
+
 }

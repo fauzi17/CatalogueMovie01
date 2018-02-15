@@ -1,7 +1,7 @@
 package com.infolabsolution.cataloguemovie01;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,12 +22,14 @@ public class DetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        TextView tvTitle = (TextView) findViewById(R.id.tv_title);
-        TextView tvOverview = (TextView) findViewById(R.id.tv_overview);
-        TextView tvVoteAvg = (TextView) findViewById(R.id.tv_vote_avg);
-        TextView tvVoteCount = (TextView) findViewById(R.id.tv_vote_count);
-        TextView tvrelease = (TextView) findViewById(R.id.tv_release_date);
-        ImageView ivPoster = (ImageView) findViewById(R.id.iv_poster_detail);
+        TextView tvTitle = findViewById(R.id.tv_title);
+        TextView tvOverview = findViewById(R.id.tv_overview);
+        TextView tvVoteAvg = findViewById(R.id.tv_vote_avg);
+        TextView tvVoteCount = findViewById(R.id.tv_vote_count);
+        TextView tvrelease = findViewById(R.id.tv_release_date);
+        ImageView ivPoster = findViewById(R.id.iv_poster_detail);
+        ImageView ivPoster_Big = findViewById(R.id.iv_poster_big);
+
 
         String title = getIntent().getStringExtra(TITLE);
         String overview = getIntent().getStringExtra(OVERVIEW);
@@ -44,6 +46,7 @@ public class DetailActivity extends AppCompatActivity {
         tvrelease.setText(DateTime.getLongDate(releaseDate));
 
         Picasso.with(this).load(poster).into(ivPoster);
+        Picasso.with(this).load(poster).into(ivPoster_Big);
 
 
     }

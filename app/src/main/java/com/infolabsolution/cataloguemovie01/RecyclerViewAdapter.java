@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -41,7 +40,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         final ListMovies listMovies = this.listMovies.get(position);
 
         holder.tvHead.setText(listMovies.getTitle());
-        holder.tvDesc.setText(DateTime.getLongDate(listMovies.getRelease()));
+        holder.tvDesc.setText(listMovies.getOverview());
+        holder.tvDesc2.setText(DateTime.getLongDate(listMovies.getRelease()));
 
         Picasso.with(context)
                 .load(listMovies.getImageUrl())
@@ -50,7 +50,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.linearLayout.setOnClickListener(new CustomOnItemClickListener(position, new CustomOnItemClickListener.OnItemClickCallback() {
             @Override
             public void onItemClicked(View view, int position) {
-                Toast.makeText(context, "Detail "+ listMovies.getTitle(),Toast.LENGTH_LONG).show();
 
                 Intent moveIntent = new Intent(context, DetailActivity.class);
 
@@ -72,10 +71,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         return listMovies.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvHead;
         public TextView tvDesc;
+        public TextView tvDesc2;
         public ImageView ivPoster;
         public LinearLayout linearLayout;
 
@@ -83,10 +83,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ViewHolder(View itemView) {
             super(itemView);
 
-            tvHead = (TextView) itemView.findViewById(R.id.tv_head);
-            tvDesc = (TextView) itemView.findViewById(R.id.tv_desc);
-            ivPoster = (ImageView) itemView.findViewById(R.id.iv_poster);
-            linearLayout = (LinearLayout) itemView.findViewById(R.id.linear_layout_list);
+            tvHead = itemView.findViewById(R.id.tv_title_small);
+            tvDesc = itemView.findViewById(R.id.tv_overview_small);
+            tvDesc2 = itemView.findViewById(R.id.tv_release_date_small);
+            ivPoster = itemView.findViewById(R.id.iv_poster);
+            linearLayout = itemView.findViewById(R.id.linear_layout_list);
         }
     }
 }

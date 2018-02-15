@@ -5,10 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-/**
- * Created by bajak on 13/02/2018.
- */
-
 public class DateTime {
 
     private static String formatDate(String date, String format) {

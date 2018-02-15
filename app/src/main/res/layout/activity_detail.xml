@@ -4,7 +4,7 @@
     android:id="@+id/activity_move"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
+    android:background="@color/colorLightDark"
     tools:context="com.infolabsolution.cataloguemovie01.DetailActivity">
 
     <LinearLayout
@@ -51,6 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/half_default_margin"
+            android:background="@color/colorWhite"
             android:orientation="horizontal">
 
             <ImageView
@@ -61,6 +62,7 @@
             <TableLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+
                 android:layout_marginBottom="@dimen/activity_vertical_margin"
                 android:layout_marginLeft="@dimen/activity_horizontal_margin"
                 android:layout_marginRight="@dimen/activity_horizontal_margin">

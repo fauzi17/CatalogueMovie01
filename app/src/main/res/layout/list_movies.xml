@@ -26,21 +26,31 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingLeft="8dp"
+                android:paddingEnd="4dp"
+                android:paddingStart="@dimen/half_default_margin"
                 android:transitionName="poster">
 
                 <TextView
-                    android:id="@+id/tv_head"
+                    android:id="@+id/tv_title_small"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Heading"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+                    android:text="@string/heading"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
                 <TextView
-                    android:id="@+id/tv_desc"
+                    android:id="@+id/tv_overview_small"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Description" />
+                    android:ellipsize="end"
+                    android:maxEms="2"
+                    android:singleLine="true"
+                    android:text="@string/description" />
+
+                <TextView
+                    android:id="@+id/tv_release_date_small"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/description" />
 
             </LinearLayout>
 
