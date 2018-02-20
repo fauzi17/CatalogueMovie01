@@ -14,6 +14,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by bajak on 12/02/2018.
  */
@@ -52,14 +55,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onItemClicked(View view, int position) {
 
                 Intent moveIntent = new Intent(context, DetailActivity.class);
-
-                moveIntent.putExtra(DetailActivity.TITLE, listMovies.getTitle());
-                moveIntent.putExtra(DetailActivity.OVERVIEW, listMovies.getOverview());
-                moveIntent.putExtra(DetailActivity.VOTE_AVG, listMovies.getVoteAvg());
-                moveIntent.putExtra(DetailActivity.VOTE_COUNT, listMovies.getVoteCount());
-                moveIntent.putExtra(DetailActivity.RELEASE, listMovies.getRelease());
-                moveIntent.putExtra(DetailActivity.POSTER_PATH, listMovies.getImageUrl());
-
+                moveIntent.putExtra(DetailActivity.LISTMOVIES, listMovies);
                 context.startActivity(moveIntent);
 
             }
@@ -73,21 +69,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView tvHead;
-        public TextView tvDesc;
-        public TextView tvDesc2;
-        public ImageView ivPoster;
-        public LinearLayout linearLayout;
-
+        @BindView(R.id.tv_title_small)
+        TextView tvHead;
+        @BindView(R.id.tv_overview_small)
+        TextView tvDesc;
+        @BindView(R.id.tv_release_date_small)
+        TextView tvDesc2;
+        @BindView(R.id.iv_poster)
+        ImageView ivPoster;
+        @BindView(R.id.linear_layout_list)
+        LinearLayout linearLayout;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
-            tvHead = itemView.findViewById(R.id.tv_title_small);
-            tvDesc = itemView.findViewById(R.id.tv_overview_small);
-            tvDesc2 = itemView.findViewById(R.id.tv_release_date_small);
-            ivPoster = itemView.findViewById(R.id.iv_poster);
-            linearLayout = itemView.findViewById(R.id.linear_layout_list);
+            ButterKnife.bind(this, itemView);
+
         }
     }
 }

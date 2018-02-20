@@ -27,9 +27,9 @@
         android:id="@+id/search_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:hint="@string/searc_bar_hint"
-        app:maxSuggestionsCount="12"
-        app:speechMode="false" />
+        app:mt_hint="@string/searc_bar_hint"
+        app:mt_maxSuggestionsCount="12"
+        app:mt_speechMode="false" />
 
     <TextView
         android:id="@+id/tv_total_movies"

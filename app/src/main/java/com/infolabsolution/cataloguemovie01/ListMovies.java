@@ -1,8 +1,22 @@
 package com.infolabsolution.cataloguemovie01;
 
-public class ListMovies {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class ListMovies implements Parcelable {
 
 
+    public static final Parcelable.Creator<ListMovies> CREATOR = new Parcelable.Creator<ListMovies>() {
+        @Override
+        public ListMovies createFromParcel(Parcel source) {
+            return new ListMovies(source);
+        }
+
+        @Override
+        public ListMovies[] newArray(int size) {
+            return new ListMovies[size];
+        }
+    };
     private static final String BASE_URL_IMG = "http://image.tmdb.org/t/p/w342";
     private String total_results;
     private String total_pages;
@@ -27,6 +41,17 @@ public class ListMovies {
     ListMovies(String total_results, String total_pages) {
         this.total_results = total_results;
         this.total_pages = total_pages;
+    }
+
+    protected ListMovies(Parcel in) {
+        this.total_results = in.readString();
+        this.total_pages = in.readString();
+        this.title = in.readString();
+        this.voteAvg = in.readString();
+        this.voteCount = in.readString();
+        this.overview = in.readString();
+        this.release = in.readString();
+        this.imageUrl = in.readString();
     }
 
     public static String getBaseUrlImg() {
@@ -65,4 +90,20 @@ public class ListMovies {
         return imageUrl;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.total_results);
+        dest.writeString(this.total_pages);
+        dest.writeString(this.title);
+        dest.writeString(this.voteAvg);
+        dest.writeString(this.voteCount);
+        dest.writeString(this.overview);
+        dest.writeString(this.release);
+        dest.writeString(this.imageUrl);
+    }
 }

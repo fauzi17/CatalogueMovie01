@@ -19,27 +19,27 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity
         implements MaterialSearchBar.OnSearchActionListener {
     private static final String API_KEY = "d6d19834a416851ac3aac202b804dfd6";
     private static final String BASE_URL = "http://api.themoviedb.org/3";
-
+    @BindView(R.id.tv_total_movies)
+    TextView tvTotalMovies;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.search_bar)
+    MaterialSearchBar searchBar;
     private String query = "code";
-
-    private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
-
-    private TextView tvTotalMovies;
-
     private SwipeRefreshLayout swipe_refresh;
-
-    private MaterialSearchBar searchBar;
     private List<String> suggestList = new ArrayList<>();
-
     private List<ListMovies> listMovies;
-
+    private List<ListMovies> listMoviesGeneral;
+    private List<ListMovies> mListMovies;
     private String movie_title = "";
     private int currentPage = 1;
     private int totalPages = 1;
@@ -48,16 +48,15 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        tvTotalMovies = findViewById(R.id.tv_total_movies);
-
-        recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         listMovies = new ArrayList<>();
+        mListMovies = new ArrayList<>();
+        listMoviesGeneral = new ArrayList<>();
 
-        searchBar = findViewById(R.id.search_bar);
         searchBar.setHint("Search movies here...");
         searchBar.setCardViewElevation(10);
         searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
@@ -78,7 +77,6 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onButtonClicked(int buttonCode) {
-
 
             }
         });
@@ -153,7 +151,6 @@ public class MainActivity extends AppCompatActivity
 
             }
         });
-
 
     }
 

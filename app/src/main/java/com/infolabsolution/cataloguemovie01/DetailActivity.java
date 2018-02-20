@@ -7,7 +7,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class DetailActivity extends AppCompatActivity {
+    public static String LISTMOVIES = "Movies";
+
     public static String TITLE = "IDS";
     public static String VOTE_AVG = "9.9";
     public static String VOTE_COUNT = "9999";
@@ -17,19 +22,29 @@ public class DetailActivity extends AppCompatActivity {
     public static String RELEASE = "2018-01-02";
     public static String POSTER_PATH = "/infolabsolution.jgp";
 
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.tv_overview)
+    TextView tvOverview;
+    @BindView(R.id.tv_vote_avg)
+    TextView tvVoteAvg;
+    @BindView(R.id.tv_vote_count)
+    TextView tvVoteCount;
+    @BindView(R.id.tv_release_date)
+    TextView tvrelease;
+    @BindView(R.id.iv_poster_detail)
+    ImageView ivPoster;
+    @BindView(R.id.iv_poster_big)
+    ImageView ivPoster_Big;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        TextView tvTitle = findViewById(R.id.tv_title);
-        TextView tvOverview = findViewById(R.id.tv_overview);
-        TextView tvVoteAvg = findViewById(R.id.tv_vote_avg);
-        TextView tvVoteCount = findViewById(R.id.tv_vote_count);
-        TextView tvrelease = findViewById(R.id.tv_release_date);
-        ImageView ivPoster = findViewById(R.id.iv_poster_detail);
-        ImageView ivPoster_Big = findViewById(R.id.iv_poster_big);
+        ButterKnife.bind(this);
 
+        ListMovies mListMovies = getIntent().getParcelableExtra(LISTMOVIES);
 
         String title = getIntent().getStringExtra(TITLE);
         String overview = getIntent().getStringExtra(OVERVIEW);
@@ -39,14 +54,14 @@ public class DetailActivity extends AppCompatActivity {
         String poster = getIntent().getStringExtra(POSTER_PATH);
 
 
-        tvTitle.setText(title);
-        tvOverview.setText(overview);
-        tvVoteAvg.setText(voteAvg);
-        tvVoteCount.setText(voteCount);
-        tvrelease.setText(DateTime.getLongDate(releaseDate));
+        tvTitle.setText(mListMovies.getTitle());
+        tvOverview.setText(mListMovies.getOverview());
+        tvVoteAvg.setText(mListMovies.getVoteAvg());
+        tvVoteCount.setText(mListMovies.getVoteCount());
+        tvrelease.setText(DateTime.getLongDate(mListMovies.getRelease()));
 
-        Picasso.with(this).load(poster).into(ivPoster);
-        Picasso.with(this).load(poster).into(ivPoster_Big);
+        Picasso.with(this).load(mListMovies.getImageUrl()).into(ivPoster);
+        Picasso.with(this).load(mListMovies.getImageUrl()).into(ivPoster_Big);
 
 
     }
