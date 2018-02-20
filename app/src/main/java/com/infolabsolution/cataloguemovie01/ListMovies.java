@@ -17,7 +17,6 @@ public class ListMovies implements Parcelable {
             return new ListMovies[size];
         }
     };
-    private static final String BASE_URL_IMG = "http://image.tmdb.org/t/p/w342";
     private String total_results;
     private String total_pages;
     private String title;
@@ -33,7 +32,7 @@ public class ListMovies implements Parcelable {
         this.voteCount = voteCount;
         this.overview = overview;
         this.release = release;
-        this.imageUrl = BASE_URL_IMG + imageUrl;
+        this.imageUrl = BuildConfig.BASE_URL_IMG + imageUrl;
 
 
     }
@@ -52,10 +51,6 @@ public class ListMovies implements Parcelable {
         this.overview = in.readString();
         this.release = in.readString();
         this.imageUrl = in.readString();
-    }
-
-    public static String getBaseUrlImg() {
-        return BASE_URL_IMG;
     }
 
     String getTotal_results() {

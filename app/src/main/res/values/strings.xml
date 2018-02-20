@@ -4,4 +4,6 @@
     <string name="heading">Heading</string>
     <string name="searc_bar_hint">Search movies by title...</string>
     <string name="movies_found">###### movies found</string>
+    <string name="poster_movies">Poster Movies</string>
+    <string name="rate_count">Rate Count</string>
 </resources>

@@ -25,8 +25,6 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity
         implements MaterialSearchBar.OnSearchActionListener {
-    private static final String API_KEY = "d6d19834a416851ac3aac202b804dfd6";
-    private static final String BASE_URL = "http://api.themoviedb.org/3";
     @BindView(R.id.tv_total_movies)
     TextView tvTotalMovies;
     @BindView(R.id.recyclerView)
@@ -97,11 +95,11 @@ public class MainActivity extends AppCompatActivity
         String url;
 
         if (listMovies.isEmpty()) {
-            url = BASE_URL + "/discover/movie?api_key=" + API_KEY;
+            url = BuildConfig.BASE_URL + "/discover/movie?api_key=" + BuildConfig.API_KEY;
 
         } else {
             listMovies.clear();
-            url = BASE_URL + "/search/movie?api_key=" + API_KEY + "&language=en-US&query=" + query;
+            url = BuildConfig.BASE_URL + "/search/movie?api_key=" + BuildConfig.API_KEY + "&language=en-US&query=" + query;
         }
 
         client.get(url, new JsonHttpResponseHandler() {
