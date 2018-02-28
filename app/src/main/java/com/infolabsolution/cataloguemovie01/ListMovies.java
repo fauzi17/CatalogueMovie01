@@ -26,6 +26,7 @@ public class ListMovies implements Parcelable {
     private String release;
     private String imageUrl;
 
+
     ListMovies(String title, String voteAvg, String voteCount, String overview, String release, String imageUrl) {
         this.title = title;
         this.voteAvg = voteAvg;

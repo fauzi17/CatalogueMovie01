@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Katalog Film</string>
+    <string name="description">Deskripsi</string>
+    <string name="heading">Judul</string>
+    <string name="searc_bar_hint">Cari film berdasarkan Judul…</string>
+    <string name="movies_found"> film ditemukan</string>
+    <string name="poster_movies">Poster Film</string>
+
+    <string name="title_bottom_nav1">Home</string>
+    <string name="title_bottom_nav2">Upcoming</string>
+    <string name="title_bottom_nav3">Now Playing</string>
+    <string name="rate_average">Nilai Rata-rata</string>
+    <string name="rate_count">Jumlah Penilai </string>
+    <string name="release_date">Tanggal Rilis</string>
+    <string name="poster">Poster</string>
+    <string name="title_home">Katalog Film - Pencarian</string>
+    <string name="title_upcoming">Film yang akan datang</string>
+    <string name="title_nowplaying">Film yang sedang diputar</string>
+    <string name="hint_seacrh_movies">Cari film disini…</string>
+    <string name="loading_data">Loading data…</string>
+    <string name="no_movies_found">Memuat data…</string>
+    <string name="change_language_settings"> Ubah pengaturan bahasa</string>
+
+
+</resources>

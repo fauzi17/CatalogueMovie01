@@ -2,7 +2,9 @@ package com.infolabsolution.cataloguemovie01;
 
 import android.app.ActionBar;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -86,24 +88,22 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.search:
-                //your code here
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (item.getItemId() == R.id.action_change_settings) {
+            Intent mIntent = new Intent(Settings.ACTION_LOCALE_SETTINGS);
+            startActivity(mIntent);
         }
+        return super.onOptionsItemSelected(item);
     }
 
     public void onClickHomeNav() {
         onCreateVariable();
-        setTitle("Catalogue Movies - Search");
+        setTitle(getString(R.string.title_home));
         searchBar.setVisibility(View.VISIBLE);
 
         searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         searchBar.setVisibility(View.GONE);
         recyclerView.setAdapter(adapter);
         loadRecyclerViewData(BuildConfig.BASE_URL, BuildConfig.UPCOMING, BuildConfig.UPCOMING, BuildConfig.API_KEY);
-        setTitle("Upcoming Movies");
+        setTitle(getString(R.string.title_upcoming));
     }
 
     public void onClickNowplayingNav() {
@@ -149,7 +149,7 @@ public class MainActivity extends AppCompatActivity
         searchBar.setVisibility(View.GONE);
         recyclerView.setAdapter(adapter);
         loadRecyclerViewData(BuildConfig.BASE_URL, BuildConfig.NOW_PLAYING, BuildConfig.NOW_PLAYING, BuildConfig.API_KEY);
-        setTitle("Now Playing Movies");
+        setTitle(getString(R.string.title_nowplaying));
     }
 
     void onCreateVariable() {
@@ -161,14 +161,14 @@ public class MainActivity extends AppCompatActivity
 
         listMovies = new ArrayList<>();
 
-        searchBar.setHint("Search movies here...");
+        searchBar.setHint(getString(R.string.hint_seacrh_movies));
         searchBar.setCardViewElevation(10);
     }
 
 
     private void loadRecyclerViewData(String baseUrl, String emptyUrl, String searchUrl, String APIKey) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
-        progressDialog.setMessage("Loading data...");
+        progressDialog.setMessage(getString(R.string.loading_data));
         progressDialog.show();
 
         AsyncHttpClient client = new AsyncHttpClient();
@@ -228,12 +228,14 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setTotalMovies(ListMovies list) {
-        String totalMovies = list.getTotal_results();
-        tvTotalMovies.setText(totalMovies + " movies found. ");
+//       String totalMovies = list.getTotal_results();
+//       String moviesFound = String.valueOf(R.string.movies_found);
+//       tvTotalMovies.setText(totalMovies +moviesFound);
+        tvTotalMovies.setVisibility(View.GONE);
     }
 
     private void setEmptySearch() {
-        tvTotalMovies.setText("No movies found.");
+        tvTotalMovies.setText(R.string.no_movies_found);
         recyclerView.clearOnChildAttachStateChangeListeners();
 
     }

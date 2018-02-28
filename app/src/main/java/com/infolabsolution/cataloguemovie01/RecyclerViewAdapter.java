@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -26,7 +27,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<ListMovies> listMovies;
     private Context context;
 
-    public RecyclerViewAdapter(List<ListMovies> listMovies, Context context) {
+
+    RecyclerViewAdapter(List<ListMovies> listMovies, Context context) {
         this.listMovies = listMovies;
         this.context = context;
     }
@@ -43,7 +45,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         final ListMovies listMovies = this.listMovies.get(position);
 
         holder.tvHead.setText(listMovies.getTitle());
-        holder.tvDesc.setText(listMovies.getOverview());
+
+        holder.tvDesc.setText(listMovies.getOverview() + "  " + Locale.getDefault().getDisplayLanguage());
         holder.tvDesc2.setText(DateTime.getLongDate(listMovies.getRelease()));
 
         Picasso.with(context)
