@@ -2,7 +2,7 @@
     <string name="app_name">CatalogueMovie</string>
     <string name="description">Description</string>
     <string name="heading">Heading</string>
-    <string name="searc_bar_hint">Search movies by title...</string>
+    <string name="searc_bar_hint">Search movies by title…</string>
     <string name="movies_found">###### movies found</string>
     <string name="poster_movies">Poster Movies</string>
     <string name="rate_count">Rate Count</string>
@@ -10,5 +10,8 @@
     <string name="title_bottom_nav1">Home</string>
     <string name="title_bottom_nav2">Upcoming</string>
     <string name="title_bottom_nav3">Now Playing</string>
+    <string name="rate_average">Rate Average</string>
+    <string name="release_date">Release Date</string>
+    <string name="poster">Poster</string>
 
 </resources>

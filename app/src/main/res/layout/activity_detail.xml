@@ -24,6 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
+                android:contentDescription="@string/poster"
                 android:scaleType="fitXY" />
 
         </FrameLayout>
@@ -79,8 +80,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/activity_vertical_margin"
-                        android:text="Rate Average "
+                        android:layout_marginEnd="@dimen/activity_vertical_margin"
+                        android:text="@string/rate_average"
                         android:textSize="14sp" />
 
                     <TextView
@@ -100,7 +101,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/activity_vertical_margin"
+                        android:layout_marginEnd="@dimen/activity_vertical_margin"
                         android:text="@string/rate_count"
                         android:textSize="14sp" />
 
@@ -121,8 +122,8 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="@dimen/activity_vertical_margin"
-                        android:text="Release Date "
+                        android:layout_marginEnd="@dimen/activity_vertical_margin"
+                        android:text="@string/release_date"
                         android:textSize="14sp" />
 
                     <TextView
