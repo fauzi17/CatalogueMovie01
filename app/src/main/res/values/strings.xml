@@ -6,4 +6,9 @@
     <string name="movies_found">###### movies found</string>
     <string name="poster_movies">Poster Movies</string>
     <string name="rate_count">Rate Count</string>
+
+    <string name="title_bottom_nav1">Home</string>
+    <string name="title_bottom_nav2">Upcoming</string>
+    <string name="title_bottom_nav3">Now Playing</string>
+
 </resources>

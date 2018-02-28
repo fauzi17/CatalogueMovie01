@@ -1,11 +1,19 @@
 package com.infolabsolution.cataloguemovie01;
 
+import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
 import android.widget.TextView;
 
 import com.loopj.android.http.AsyncHttpClient;
@@ -25,38 +33,79 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity
         implements MaterialSearchBar.OnSearchActionListener {
+
     @BindView(R.id.tv_total_movies)
     TextView tvTotalMovies;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     @BindView(R.id.search_bar)
     MaterialSearchBar searchBar;
+
     private String query = "code";
     private RecyclerView.Adapter adapter;
     private SwipeRefreshLayout swipe_refresh;
     private List<String> suggestList = new ArrayList<>();
     private List<ListMovies> listMovies;
-    private List<ListMovies> listMoviesGeneral;
-    private List<ListMovies> mListMovies;
-    private String movie_title = "";
     private int currentPage = 1;
     private int totalPages = 1;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.bottom_nav1:
+                    onClickHomeNav();
+                    return true;
+
+                case R.id.bottom_nav2:
+                    onClickUpcomingNav();
+                    return true;
+
+                case R.id.bottom_nav3:
+                    onClickNowplayingNav();
+                    return true;
+            }
+            return false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        ActionBar actionBar = getActionBar();
 
-        listMovies = new ArrayList<>();
-        mListMovies = new ArrayList<>();
-        listMoviesGeneral = new ArrayList<>();
+        onClickHomeNav();
 
-        searchBar.setHint("Search movies here...");
-        searchBar.setCardViewElevation(10);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.search:
+                //your code here
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void onClickHomeNav() {
+        onCreateVariable();
+        setTitle("Catalogue Movies - Search");
+        searchBar.setVisibility(View.VISIBLE);
+
         searchBar.setOnSearchActionListener(new MaterialSearchBar.OnSearchActionListener() {
             @Override
             public void onSearchStateChanged(boolean enabled) {
@@ -69,24 +118,55 @@ public class MainActivity extends AppCompatActivity
             public void onSearchConfirmed(CharSequence text) {
 
                 startSearch(query = text.toString(), true, null, false);
-                loadRecyclerViewData();
+                loadRecyclerViewData(BuildConfig.BASE_URL, BuildConfig.DISCOVER, BuildConfig.SEARCH, BuildConfig.API_KEY);
 
             }
 
             @Override
             public void onButtonClicked(int buttonCode) {
-
             }
         });
 
         if (listMovies.isEmpty()) {
-            loadRecyclerViewData();
+            loadRecyclerViewData(BuildConfig.BASE_URL, BuildConfig.DISCOVER, BuildConfig.SEARCH, BuildConfig.API_KEY);
         }
+
 
     }
 
+    public void onClickUpcomingNav() {
+        onCreateVariable();
 
-    private void loadRecyclerViewData() {
+        searchBar.setVisibility(View.GONE);
+        recyclerView.setAdapter(adapter);
+        loadRecyclerViewData(BuildConfig.BASE_URL, BuildConfig.UPCOMING, BuildConfig.UPCOMING, BuildConfig.API_KEY);
+        setTitle("Upcoming Movies");
+    }
+
+    public void onClickNowplayingNav() {
+        onCreateVariable();
+
+        searchBar.setVisibility(View.GONE);
+        recyclerView.setAdapter(adapter);
+        loadRecyclerViewData(BuildConfig.BASE_URL, BuildConfig.NOW_PLAYING, BuildConfig.NOW_PLAYING, BuildConfig.API_KEY);
+        setTitle("Now Playing Movies");
+    }
+
+    void onCreateVariable() {
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        listMovies = new ArrayList<>();
+
+        searchBar.setHint("Search movies here...");
+        searchBar.setCardViewElevation(10);
+    }
+
+
+    private void loadRecyclerViewData(String baseUrl, String emptyUrl, String searchUrl, String APIKey) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading data...");
         progressDialog.show();
@@ -95,11 +175,11 @@ public class MainActivity extends AppCompatActivity
         String url;
 
         if (listMovies.isEmpty()) {
-            url = BuildConfig.BASE_URL + "/discover/movie?api_key=" + BuildConfig.API_KEY;
-
+            url = baseUrl + emptyUrl + APIKey;
         } else {
             listMovies.clear();
-            url = BuildConfig.BASE_URL + "/search/movie?api_key=" + BuildConfig.API_KEY + "&language=en-US&query=" + query;
+            url = baseUrl + searchUrl + APIKey + "&language=en-US&query=" + query;
+            Log.d("query ", url);
         }
 
         client.get(url, new JsonHttpResponseHandler() {
@@ -114,7 +194,6 @@ public class MainActivity extends AppCompatActivity
                             response.getString("total_results"),
                             response.getString("total_pages")
                     );
-
 
                     JSONArray array = response.getJSONArray("results");
 
@@ -137,16 +216,12 @@ public class MainActivity extends AppCompatActivity
                     } else {
 
                         setTotalMovies(item_result);
-
                         adapter = new RecyclerViewAdapter(listMovies, getApplicationContext());
                         recyclerView.setAdapter(adapter);
                     }
-
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
