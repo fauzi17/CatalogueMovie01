@@ -58,7 +58,7 @@ public class DetailActivity extends AppCompatActivity {
         tvOverview.setText(mListMovies.getOverview());
         tvVoteAvg.setText(mListMovies.getVoteAvg());
         tvVoteCount.setText(mListMovies.getVoteCount());
-        tvrelease.setText(DateTime.getLongDate(mListMovies.getRelease()));
+        tvrelease.setText(DateTime.getDate(mListMovies.getRelease()));
 
         Picasso.with(this).load(mListMovies.getImageUrl()).into(ivPoster);
         Picasso.with(this).load(mListMovies.getImageUrl()).into(ivPoster_Big);

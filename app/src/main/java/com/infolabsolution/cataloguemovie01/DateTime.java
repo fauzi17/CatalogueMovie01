@@ -8,23 +8,20 @@ import java.util.Date;
 public class DateTime {
 
     private static String formatDate(String date, String format) {
-        String result = "";
-        DateFormat old = new SimpleDateFormat("yyyy-MM-dd");
+        String result = "date";
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date oldDate = old.parse(date);
+            Date dateDate = dateFormat.parse(date);
             DateFormat newFormat = new SimpleDateFormat(format);
-            result = newFormat.format(oldDate);
+            result = newFormat.format(dateDate);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return result;
     }
 
-    public static String getShortDate(String date) {
-        return formatDate(date, "dd MMMM yyyy");
-    }
+    public static String getDate(String date) {
 
-    public static String getLongDate(String date) {
         return formatDate(date, "EEEE, MMM d, yyyy");
     }
 }
