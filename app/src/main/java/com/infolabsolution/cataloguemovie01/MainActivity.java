@@ -1,6 +1,5 @@
 package com.infolabsolution.cataloguemovie01;
 
-import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        ActionBar actionBar = getActionBar();
+        //ActionBar actionBar = getActionBar();
 
         onClickHomeNav();
 

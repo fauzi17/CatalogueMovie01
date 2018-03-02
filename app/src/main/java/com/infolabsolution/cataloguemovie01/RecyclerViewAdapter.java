@@ -43,7 +43,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.tvHead.setText(listMovies.getTitle());
 
         holder.tvDesc.setText(listMovies.getOverview() + "  " + Locale.getDefault().getDisplayLanguage());
-        holder.tvDesc2.setText(DateTime.getLongDate(listMovies.getRelease()));
+        holder.tvDesc2.setText(DateTime.getDate(listMovies.getRelease()));
 
         Picasso.with(context)
                 .load(listMovies.getImageUrl())
