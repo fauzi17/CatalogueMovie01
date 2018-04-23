@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
+        android:id="@+id/cv_movies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/half_default_margin">
@@ -21,7 +23,8 @@
                 android:layout_width="45dp"
                 android:layout_height="68dp"
                 android:contentDescription="@string/poster"
-                android:scaleType="centerCrop" />
+                android:scaleType="centerCrop"
+                tools:src="@mipmap/ic_launcher" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,7 +38,7 @@
                     android:id="@+id/tv_title_small"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/heading"
+                    tools:text="Title"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
                 <TextView
@@ -45,13 +48,13 @@
                     android:ellipsize="end"
                     android:maxEms="2"
                     android:singleLine="true"
-                    android:text="@string/description" />
+                    tools:text="Desc" />
 
                 <TextView
                     android:id="@+id/tv_release_date_small"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/description" />
+                    tools:text="Date" />
 
             </LinearLayout>
 

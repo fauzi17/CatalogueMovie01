@@ -11,8 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        tools:text="Android">
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large">
 
 
         <FrameLayout
@@ -25,20 +24,35 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/poster"
-                android:scaleType="fitXY" />
+                android:scaleType="fitXY"
+                tools:src="@drawable/ic_launcher_background" />
 
         </FrameLayout>
 
-        <TextView
-            android:id="@+id/tv_title"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_marginRight="@dimen/activity_horizontal_margin"
-            android:layout_marginTop="@dimen/activity_vertical_margin"
-            android:textColor="@android:color/black"
-            android:textSize="32sp" />
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/default_margin"
+                android:layout_weight="1"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                tools:text="The Ninja" />
+
+            <ToggleButton
+                android:id="@+id/tb_favorite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onToggleClicked"
+                tools:textOff="Added to Favorite"
+                tools:textOn="Remove From Favorite" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_overview"
@@ -49,96 +63,107 @@
             android:layout_marginRight="@dimen/activity_horizontal_margin"
             android:layout_marginTop="@dimen/activity_vertical_margin"
             android:textColor="@android:color/black"
+            android:text="@string/text_lorem_ipsum"
+            android:textAlignment="center"
             android:textSize="16sp" />
 
-        <LinearLayout
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/half_default_margin"
-            android:background="@color/colorWhite"
-            android:orientation="horizontal">
+            android:elevation="4dp">
 
-            <ImageView
-                android:id="@+id/iv_poster_detail"
-                android:layout_width="65dp"
-                android:layout_height="90dp"
-                android:contentDescription="@string/poster_movies" />
-
-            <TableLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/colorWhite"
+                android:orientation="horizontal">
 
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin">
+                <ImageView
+                    android:id="@+id/iv_poster_detail"
+                    android:layout_width="65dp"
+                    android:layout_height="90dp"
+                    android:contentDescription="@string/poster_movies"
+                    tools:src="@drawable/ic_launcher_background" />
 
-                <TableRow
+                <TableLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/activity_vertical_margin"
-                        android:text="@string/rate_average"
-                        android:textSize="14sp" />
+                    android:layout_marginBottom="@dimen/activity_vertical_margin"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin">
 
-                    <TextView
-                        android:id="@+id/tv_vote_avg"
+                    <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@android:color/black"
-                        android:textSize="14sp" />
-                </TableRow>
+                        android:layout_marginBottom="8dp">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/activity_vertical_margin"
+                            android:text="@string/rate_average"
+                            android:textSize="14sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/activity_vertical_margin"
-                        android:text="@string/rate_count"
-                        android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/tv_vote_avg"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="14sp"
+                            tools:text="9.9" />
+                    </TableRow>
 
-                    <TextView
-                        android:id="@+id/tv_vote_count"
+                    <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@android:color/black"
-                        android:textSize="14sp" />
-                </TableRow>
+                        android:layout_marginBottom="8dp">
 
-                <TableRow
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/activity_vertical_margin"
+                            android:text="@string/rate_count"
+                            android:textSize="14sp" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/activity_vertical_margin"
-                        android:text="@string/release_date"
-                        android:textSize="14sp" />
+                        <TextView
+                            android:id="@+id/tv_vote_count"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="14sp"
+                            tools:text="19743" />
+                    </TableRow>
 
-                    <TextView
-                        android:id="@+id/tv_release_date"
+                    <TableRow
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textColor="@android:color/black"
-                        android:textSize="14sp" />
-                </TableRow>
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="@dimen/activity_vertical_margin"
+                            android:text="@string/release_date"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_release_date"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="14sp"
+                            tools:text="Sunday, 20 April 2018" />
+                    </TableRow>
 
 
-            </TableLayout>
-        </LinearLayout>
-
+                </TableLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
 
     </LinearLayout>
 </ScrollView>

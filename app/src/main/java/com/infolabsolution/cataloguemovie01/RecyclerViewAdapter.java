@@ -1,5 +1,6 @@
 package com.infolabsolution.cataloguemovie01;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
@@ -22,11 +23,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private List<ListMovies> listMovies;
     private Context context;
-
+    private Activity activity;
 
     RecyclerViewAdapter(List<ListMovies> listMovies, Context context) {
         this.listMovies = listMovies;
         this.context = context;
+    }
+
+    RecyclerViewAdapter(Activity activity) {
+        this.activity = activity;
     }
 
     @Override
@@ -55,6 +60,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 Intent moveIntent = new Intent(context, DetailActivity.class);
                 moveIntent.putExtra(DetailActivity.LISTMOVIES, listMovies);
+                moveIntent.putExtra(DetailActivity.EXTRA_POSITION, position);
                 context.startActivity(moveIntent);
 
             }

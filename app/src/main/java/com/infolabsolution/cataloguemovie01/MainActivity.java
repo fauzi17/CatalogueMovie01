@@ -2,11 +2,12 @@ package com.infolabsolution.cataloguemovie01;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,8 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.infolabsolution.cataloguemovie01.database.DatabaseContract;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.mancj.materialsearchbar.MaterialSearchBar;
@@ -32,6 +36,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.msebera.android.httpclient.Header;
 
+import static com.infolabsolution.cataloguemovie01.database.DatabaseContract.CONTENT_URI;
+
 public class MainActivity extends AppCompatActivity
         implements MaterialSearchBar.OnSearchActionListener {
 
@@ -41,11 +47,17 @@ public class MainActivity extends AppCompatActivity
     RecyclerView recyclerView;
     @BindView(R.id.search_bar)
     MaterialSearchBar searchBar;
+    @BindView(R.id.progressbar)
+    ProgressBar progressBar;
+
+    private Cursor list;
+    //private FavoriteHelper favoriteHelper;
+    //private LinkedList<Favorite> list;
+
 
     private String query = "code";
     private RecyclerView.Adapter adapter;
-    private SwipeRefreshLayout swipe_refresh;
-    private List<String> suggestList = new ArrayList<>();
+    private FavoriteAdapter favoriteAdapter;
     private List<ListMovies> listMovies;
     private int currentPage = 1;
     private int totalPages = 1;
@@ -66,6 +78,10 @@ public class MainActivity extends AppCompatActivity
                 case R.id.bottom_nav3:
                     onClickNowplayingNav();
                     return true;
+
+                case R.id.bottom_nav4:
+                    onFavoriteNav();
+                    return true;
             }
             return false;
         }
@@ -79,7 +95,6 @@ public class MainActivity extends AppCompatActivity
         ButterKnife.bind(this);
 
         //ActionBar actionBar = getActionBar();
-
         onClickHomeNav();
 
     }
@@ -151,6 +166,32 @@ public class MainActivity extends AppCompatActivity
         setTitle(getString(R.string.title_nowplaying));
     }
 
+    public void onFavoriteNav() {
+        onCreateVariable();
+        searchBar.setVisibility(View.GONE);
+        setTitle(getString(R.string.title_favorite));
+
+        //favoriteHelper = new FavoriteHelper(this);
+        //favoriteHelper.open();
+        //list = new LinkedList<>();
+
+        list = getContentResolver().query(DatabaseContract.CONTENT_URI, null, null, null, null);
+
+        favoriteAdapter = new FavoriteAdapter(this);
+        favoriteAdapter.setListFavorites(list);
+
+        recyclerView.setAdapter(favoriteAdapter);
+
+        new LoadNoteAsync().execute();
+
+
+    }
+
+    private void loadRecyclerViewDatFavorite() {
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(getString(R.string.loading_data));
+    }
+
     void onCreateVariable() {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -164,7 +205,6 @@ public class MainActivity extends AppCompatActivity
         searchBar.setCardViewElevation(10);
     }
 
-
     private void loadRecyclerViewData(String baseUrl, String emptyUrl, String searchUrl, String APIKey) {
         final ProgressDialog progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(getString(R.string.loading_data));
@@ -175,6 +215,7 @@ public class MainActivity extends AppCompatActivity
 
         if (listMovies.isEmpty()) {
             url = baseUrl + emptyUrl + APIKey;
+            Log.d("isEmpty ", url);
         } else {
             listMovies.clear();
             url = baseUrl + searchUrl + APIKey + "&language=en-US&query=" + query;
@@ -214,7 +255,6 @@ public class MainActivity extends AppCompatActivity
 
                     } else {
 
-                        setTotalMovies(item_result);
                         adapter = new RecyclerViewAdapter(listMovies, getApplicationContext());
                         recyclerView.setAdapter(adapter);
                     }
@@ -222,81 +262,26 @@ public class MainActivity extends AppCompatActivity
                     e.printStackTrace();
                 }
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable, JSONObject errorResponse) {
+                super.onFailure(statusCode, headers, throwable, errorResponse);
+                Log.d("onFailure AsycHttp ", Integer.toString(statusCode));
+            }
         });
 
     }
 
-    private void setTotalMovies(ListMovies list) {
-//       String totalMovies = list.getTotal_results();
-//       String moviesFound = String.valueOf(R.string.movies_found);
-//       tvTotalMovies.setText(totalMovies +moviesFound);
-        tvTotalMovies.setVisibility(View.GONE);
+    @Override
+    public void onSearchConfirmed(CharSequence text) {
+
     }
 
     private void setEmptySearch() {
         tvTotalMovies.setText(R.string.no_movies_found);
         recyclerView.clearOnChildAttachStateChangeListeners();
-
     }
-//
-//    private void loadData(final String movie_title) {
-//        getSupportActionBar().setSubtitle("");
-//
-//        if (movie_title.isEmpty()) apiCall = apiClient.getService().getPopularMovie(currentPage);
-//        else apiCall = apiClient.getService().getSearchMovie(currentPage, movie_title);
-//
-//        apiCall.enqueue(new Callback<SearchModel>() {
-//            @Override
-//            public void onResponse(Call<SearchModel> call, Response<SearchModel> response) {
-//                if (response.isSuccessful()) {
-//                    totalPages = response.body().getTotalPages();
-//                    List<ResultsItem> items = response.body().getResults();
-//                    showResults(response.body().getTotalResults());
-//
-//                    if (currentPage > 1) adapter.updateData(items);
-//                    else adapter.replaceAll(items);
-//
-//                    stopRefrehing();
-//                } else loadFailed();
-//            }
-//
-//            @Override
-//            public void onFailure(Call<SearchModel> call, Throwable t) {
-//                loadFailed();
-//            }
-//        });
-//    }
 
-//    private void loadFailed() {
-//        stopRefrehing();
-//        Toast.makeText(MainActivity.this, "Failed to load data.\nPlease check your Internet connections!", Toast.LENGTH_SHORT).show();
-//    }
-//
-//
-//    private void startRefreshing() {
-//        if (swipe_refresh.isRefreshing()) return;
-//        swipe_refresh.setRefreshing(true);
-//
-////        loadData(movie_title);
-//    }
-//
-//
-//    private void stopRefrehing() {
-//        if (swipe_refresh.isRefreshing()) {
-//            swipe_refresh.setRefreshing(false);
-//        }
-//    }
-//
-//
-//    @Override
-//    public void onRefresh() {
-//        currentPage = 1;
-//        totalPages = 1;
-//
-//        stopRefrehing();
-//        startRefreshing();
-//
-//    }
 
     @Override
     public void onSearchStateChanged(boolean enabled) {
@@ -304,9 +289,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onSearchConfirmed(CharSequence text) {
-//        movie_title = String.valueOf(text);
-//        onRefresh();
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override
@@ -314,5 +298,35 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    private class LoadNoteAsync extends AsyncTask<Void, Void, Cursor> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            progressBar.setVisibility(View.VISIBLE);
+
+//            if (list.size() > 0){
+//                list.clear();
+//            }
+        }
+
+        @Override
+        protected Cursor doInBackground(Void... voids) {
+            return getContentResolver().query(CONTENT_URI, null, null, null, null);
+        }
+
+        @Override
+        protected void onPostExecute(Cursor favorites) {
+            super.onPostExecute(favorites);
+            progressBar.setVisibility(View.GONE);
+
+            list = favorites;
+            favoriteAdapter.setListFavorites(list);
+            favoriteAdapter.notifyDataSetChanged();
+
+            if (list.getCount() == 0) {
+                Toast.makeText(MainActivity.this, "Tidak ada data saat ini", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 }

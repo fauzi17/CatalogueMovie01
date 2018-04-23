@@ -52,14 +52,9 @@ public class MyAsyncTaskLoader extends AsyncTaskLoader<ArrayList<ListMovies>> {
         }
     }
 
-
-    // Format search kota url JAKARTA = 1642911 ,BANDUNG = 1650357, SEMARANG = 1627896
-    // http://api.openweathermap.org/data/2.5/group?id=1642911,1650357,1627896&units=metric&appid=API_KEY
-
     @Override
     public ArrayList<ListMovies> loadInBackground() {
         SyncHttpClient client = new SyncHttpClient();
-        String query = "black";
 
         final ArrayList<ListMovies> moviesItemses = new ArrayList<>();
         String url = BuildConfig.BASE_URL + BuildConfig.DISCOVER + BuildConfig.API_KEY;
